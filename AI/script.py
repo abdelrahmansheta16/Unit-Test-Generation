@@ -23,7 +23,6 @@ def analyze_smart_contract(file_path):
     Returns:
     - dict: Information about functions, inputs, and outputs.
     """
-    solidity_code = ""
     with open(file_path, "r") as file:
         solidity_code = file.read()
     return solidity_code
@@ -61,13 +60,13 @@ Ensure that the generated JSON format is well-structured and readable.
 
     chain = LLMChain(llm=llm, prompt=summary_prompt_template)
     res = chain.invoke(input={"contract_info": contract_info})
+    print(res)
     python_agent_executor = create_python_agent(
         llm=ChatOpenAI(temperature=0.7, model="gpt-3.5-turbo"),
         tool=PythonREPLTool(),
         agent_type=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True,
     )
-
     response = python_agent_executor.invoke(
         f"Given a JSON object containing information about a smart contract and its test cases, convert it into a more readable JSON object. The JSON object is structured as follows:\n{res}.\nThe output should include only the extracted test_cases key and its array.\n Save the output into a file named 'output.json'\nEnsure that the output maintains clarity and is easy to understand.\nYou may consider adding appropriate line breaks, indentation, and comments if necessary.\nFeel free to make the necessary adjustments for better readability."
     )
@@ -94,7 +93,7 @@ def main():
         print("Usage: python script.py <path_to_solidity_file>")
         sys.exit(1)
 
-    # Get the file path from the command line
+    # Get the file path from the command lineR
     solidity_file_path = sys.argv[1]
 
     # Check if the Solidity file exists
